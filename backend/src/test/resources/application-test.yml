@@ -1,0 +1,21 @@
+# Test profile: integration tests run against a REAL PostgreSQL database (never an
+# in-memory substitute), per the project rule that mock-only tests must not stand in
+# for integration evidence. Point TEST_DB_URL at a disposable database; Flyway migrates it.
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:postgresql://localhost:5432/supply_test}
+    username: ${TEST_DB_USER:postgres}
+    password: ${TEST_DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    locations: classpath:db/migration,classpath:db/dev-seed
+
+app:
+  session:
+    secure-cookie: false   # tests drive the app over plain http on localhost
+  login:
+    max-attempts: 5
+    window-seconds: 60

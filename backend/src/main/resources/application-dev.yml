@@ -1,0 +1,14 @@
+# Development profile: same-laptop testing over plain http://localhost.
+# Secure is relaxed here ONLY because browsers treat http://localhost as a secure
+# context and the contract permits exactly this one relaxation. Start with:
+#   mvn spring-boot:run -Dspring-boot.run.profiles=dev
+app:
+  session:
+    secure-cookie: false
+
+spring:
+  flyway:
+    # dev-seed holds the development-only users (keeper1/boss1, password "demo").
+    # Outside this profile (and test) that location is absent: no known-password
+    # account exists, so a non-dev launch fails closed.
+    locations: classpath:db/migration,classpath:db/dev-seed

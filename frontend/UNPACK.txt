@@ -1,0 +1,4 @@
+This is the separate styled frontend (offline-supply-polished).
+Use README.md for previewing and mode selection.
+If starting from the base64 TXT, use styled-frontend-guide.md for its exact unpack steps.
+Do not use the old frontend ZIP decode commands for this tar.gz-based bundle.

@@ -1,0 +1,44 @@
+# supply-server configuration.
+# Every operational value comes from the environment; the defaults match the
+# local Docker Compose database. Nothing secret is stored in this file.
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: supply-server
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/supply}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      write-dates-as-timestamps: false
+
+app:
+  session:
+    cookie-name: ${SESSION_COOKIE_NAME:SUPPLY_SESSION}
+    ttl-hours: ${SESSION_TTL_HOURS:24}
+    # Contract requires Secure. Relaxed only in the dev profile for same-laptop
+    # http://localhost testing; never relax in any shared or deployed setup.
+    secure-cookie: ${SESSION_SECURE_COOKIE:true}
+  login:
+    max-attempts: ${LOGIN_MAX_ATTEMPTS:5}
+    window-seconds: ${LOGIN_WINDOW_SECONDS:60}
+  sync:
+    max-batch-size: ${SYNC_MAX_BATCH_SIZE:500}
+    max-pull-limit: ${SYNC_MAX_PULL_LIMIT:500}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
